@@ -4,14 +4,6 @@ pipeline {
 		DOCKERHUB_CREDENTIALS = credentials('dockerhub')
 	}
     stages {
-	stage('Build') {
-		steps {
-			script {
-				def serverContainerId = sh(script: "docker build -t -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server", returnStdout: true).trim()
-				def frontContainerId = sh(script: "docker build -t -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front", returnStdout: true).trim()
-               		}
-  		}
-       	}
 	stage('Deploy Containers') {
           	steps {
               		script {

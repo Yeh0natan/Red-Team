@@ -33,34 +33,32 @@ pipeline {
                 }
             }
         }
-		stage('Login') {
-			steps {
-				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-			}
-		}
-		stage('Push') {
-			steps {
-				sh 'docker push yehonatan111/reactapp_server'
-				sh 'docker push yehonatan111/reactapp_front'
-			}
+	stage('Login') {
+		steps {
+			sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 		}
 	}
-	post {
-		always {
-			sh 'docker logout'
+	stage('Push') {
+		steps {
+			sh 'docker push yehonatan111/reactapp_server'
+			sh 'docker push yehonatan111/reactapp_front'
 		}
+	}
+}
+post {
+	always {
+		sh 'docker logout'
+	}
         success {
             echo "Tests passed, pipeline succeeded!"
             cleanUpContainers()
         }
-
         failure {
             echo "Tests failed, pipeline failed!"
             cleanUpContainers()
         }
     }
 }
-
 def cleanUpContainers() {
     script {
         sh "docker stop reactapp_server reactapp_front"

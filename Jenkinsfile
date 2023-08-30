@@ -6,17 +6,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-//                sh 'docker build -t yehonatan111/reactapp_server ./server'
-//                sh 'docker build -t yehonatan111/reactapp_front ./frontend'
-		sh 'dokcer image'
+                sh 'docker build -t yehonatan111/server:v1 ./server'
+                sh 'docker build -t yehonatan111/front:v1 ./frontend'
 	    }
 	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -d -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server'
-                sh 'sleep 5' // Give the containers some time to start up
-		sh 'docker run -d -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front'
-                sh 'sleep 5' // Give the containers some time to start up
+		sh 'docker run -d -p 3001:3001 yehonatan111/server:v1'
+                sh 'sleep 5' // Give the container some time to start up
+		sh 'docker run -d -p 3000:3000 yehonatan111/front:v1'
+                sh 'sleep 5' // Give the container some time to start up
             }
         }
         stage('Run Tests') {
@@ -37,10 +36,15 @@ pipeline {
 	    }
 	    stage('Push') {
 		    steps {
-			    sh 'docker push yehonatan111/reactapp_server'
-		    	sh 'docker push yehonatan111/reactapp_front'
+			sh 'docker push yehonatan111/server:v1'
+		    	sh 'docker push yehonatan111/front:v1'
 		    }
 	    }
+	    stage('Remove images') {
+		    steps {
+			    sh 'docker kill $(docker ps -q)'
+			    sh 'docker rmi -f yehonatan111/server:v1'
+			    sh 'docker rmi -f yehonatan111/front:v1'
     }
  post {
  	always {

@@ -56,7 +56,8 @@ pipeline {
 //             cleanUpContainers()
 //         }
 //     }
-}
+    }
+}    
 def cleanUpContainers() {
     script {
         sh "docker stop reactapp_server reactapp_front"

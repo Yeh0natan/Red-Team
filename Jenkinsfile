@@ -6,8 +6,8 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker build -t yehonatan111/reactapp_server ./server'
-                sh 'docker build -t yehonatan111/reactapp_front ./frontend'
+                sh 'docker build -t yehonatan111/serverapp ./server'
+                sh 'docker build -t yehonatan111/frontendapp ./frontend'
 	    }
 	}
         stage('Deploy Containers') {

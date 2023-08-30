@@ -6,15 +6,16 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker build -t yehonatan111/reactapp_server ./server'
-                sh 'docker build -t yehonatan111/reactapp_front ./frontend'
+//                sh 'docker build -t yehonatan111/reactapp_server ./server'
+//                sh 'docker build -t yehonatan111/reactapp_front ./frontend'
+		sh 'dokcer image'
 	    }
 	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -p 3001:3001 yehonatan111/reactapp_server'
+		sh 'docker run -d -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server'
                 sh 'sleep 5' // Give the containers some time to start up
-		sh 'docker run -p 3000:3000 yehonatan111/reactapp_front'
+		sh 'docker run -d -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front'
                 sh 'sleep 5' // Give the containers some time to start up
             }
         }

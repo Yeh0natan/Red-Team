@@ -12,9 +12,9 @@ pipeline {
 //	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -d -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server'
+		sh 'docker run -d -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server ./server'
                 sh 'sleep 15' // Give the containers some time to start up
-		sh 'docker run -d -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front'
+		sh 'docker run -d -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front ./frontend'
                 sh 'sleep 15' // Give the containers some time to start up
             }
         }

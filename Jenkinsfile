@@ -40,13 +40,13 @@ pipeline {
 		    	sh 'docker push yehonatan111/frontapp'
 		    }
 	    }
-	    stage('Remove images') {
-		steps {
-			sh 'docker kill $(docker ps -q)'
-			sh 'docker rmi -f yehonatan111/serverapp'
-			sh 'docker rmi -f yehonatan111/frontapp'
-		}
-	    }
+//	    stage('Remove images') {
+//		steps {
+//			sh 'docker kill $(docker ps -q)'
+//			sh 'docker rmi -f yehonatan111/serverapp'
+//			sh 'docker rmi -f yehonatan111/frontapp'
+//		}
+//	    }
     }
  post {
  	always {

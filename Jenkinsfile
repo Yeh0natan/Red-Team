@@ -41,10 +41,12 @@ pipeline {
 		    }
 	    }
 	    stage('Remove images') {
-		    steps {
-			    sh 'docker kill $(docker ps -q)'
-			    sh 'docker rmi -f yehonatan111/server:v1'
-			    sh 'docker rmi -f yehonatan111/front:v1'
+		steps {
+			sh 'docker kill $(docker ps -q)'
+			sh 'docker rmi -f yehonatan111/server:v1'
+			sh 'docker rmi -f yehonatan111/front:v1'
+		}
+	    }
     }
  post {
  	always {

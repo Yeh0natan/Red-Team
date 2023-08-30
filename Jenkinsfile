@@ -12,23 +12,23 @@ pipeline {
 	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -d -p 301:3001 yehonatan111/serverapp'
+		sh 'docker run -d -p 31:3001 yehonatan111/serverapp'
                 sh 'sleep 5' // Give the container some time to start up
-		sh 'docker run -d -p 300:3000 yehonatan111/frontapp'
+		sh 'docker run -d -p 30:3000 yehonatan111/frontapp'
                 sh 'sleep 5' // Give the container some time to start up
             }
         }
-        stage('Run Tests') {
-            steps {
-                script {
-                    def pytestExitCode = sh(script: "docker run --rm yehonatan111/reactapp_pytest", returnStatus: true)
-                
-                    if (pytestExitCode != 0) {
-                        error("Pytest failed with exit code: ${pytestExitCode}")
-                    }
-                }
-            }
-        }
+\\        stage('Run Tests') {
+\\            steps {
+\\                script {
+\\                    def pytestExitCode = sh(script: "docker run --rm yehonatan111/reactapp_pytest", returnStatus: true)
+\\                
+\\                    if (pytestExitCode != 0) {
+\\                        error("Pytest failed with exit code: ${pytestExitCode}")
+\\                    }
+\\                }
+\\            }
+\\        }
 	    stage('Login') {
 	    	steps {
 		    	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'

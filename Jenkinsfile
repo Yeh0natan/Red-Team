@@ -4,17 +4,17 @@ pipeline {
 		DOCKERHUB_CREDENTIALS = credentials('dockerhub')
 	}
     stages {
-//        stage('Build') {
-//            steps {
-//                sh 'docker build -t yehonatan111/reactapp_server ./server'
-//                sh 'docker build -t yehonatan111/reactapp_front ./frontend'
-//	    }
-//	}
+        stage('Build') {
+            steps {
+                sh 'docker build -t yehonatan111/reactapp_server ./server'
+                sh 'docker build -t yehonatan111/reactapp_front ./frontend'
+	    }
+	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -d -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server ./server'
+		sh 'docker run -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server'
                 sh 'sleep 15' // Give the containers some time to start up
-		sh 'docker run -d -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front ./frontend'
+		sh 'docker run -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front'
                 sh 'sleep 15' // Give the containers some time to start up
             }
         }

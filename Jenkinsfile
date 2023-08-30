@@ -6,15 +6,15 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker build -t yehonatan111/serverapp ./server'
-                sh 'docker build -t yehonatan111/frontapp ./frontend'
+                sh 'docker build -t yehonatan111/appserver ./server'
+                sh 'docker build -t yehonatan111/appfront ./frontend'
 	    }
 	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -d -p 3201:3001 yehonatan111/serverapp'
+		sh 'docker run -d -p 3201:3001 yehonatan111/appserver'
                 sh 'sleep 5' // Give the container some time to start up
-		sh 'docker run -d -p 3200:3000 yehonatan111/frontapp'
+		sh 'docker run -d -p 3200:3000 yehonatan111/appfront'
                 sh 'sleep 5' // Give the container some time to start up
             }
         }
@@ -36,8 +36,8 @@ pipeline {
 	    }
 	    stage('Push') {
 		    steps {
-			sh 'docker push yehonatan111/serverapp'
-		    	sh 'docker push yehonatan111/frontapp'
+			sh 'docker push yehonatan111/appserver'
+		    	sh 'docker push yehonatan111/appfront'
 		    }
 	    }
 //	    stage('Remove images') {

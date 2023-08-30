@@ -62,10 +62,4 @@ pipeline {
 //         }
 //     }
     }
-}    
-def cleanUpContainers() {
-    script {
-        sh "docker stop reactapp_server reactapp_front"
-        sh "docker rm reactapp_server reactapp_front"
-    }
 }

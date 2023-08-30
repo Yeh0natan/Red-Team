@@ -12,9 +12,9 @@ pipeline {
 	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -d -p 3201:3001 yehonatan111/appserver'
+		sh 'docker run -d -p 3001:3001 yehonatan111/appserver'
                 sh 'sleep 5' // Give the container some time to start up
-		sh 'docker run -d -p 3200:3000 yehonatan111/appfront'
+		sh 'docker run -d -p 3000:3000 yehonatan111/appfront'
                 sh 'sleep 5' // Give the container some time to start up
             }
         }
@@ -40,13 +40,13 @@ pipeline {
 		    	sh 'docker push yehonatan111/appfront'
 		    }
 	    }
-//	    stage('Remove images') {
-//		steps {
-//			sh 'docker kill $(docker ps -q)'
-//			sh 'docker rmi -f yehonatan111/serverapp'
-//			sh 'docker rmi -f yehonatan111/frontapp'
-//		}
-//	    }
+	    stage('Remove images') {
+		steps {
+			sh 'docker kill $(docker ps -q)'
+			sh 'docker rmi -f yehonatan111/serverapp'
+			sh 'docker rmi -f yehonatan111/frontapp'
+		}
+	    }
     }
  post {
  	always {

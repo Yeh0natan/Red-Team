@@ -6,20 +6,20 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker build -t yehonatan111/reactapp_server ./server'
-                sh 'docker build -t yehonatan111/reactapp_front ./frontend'
+                sh 'docker build -t -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server ./server'
+                sh 'docker build -t -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front ./frontend'
 	    }
 	}
-        stage('Deploy Containers') {
-            steps {
-                script {
-                    def serverContainerId = sh(script: "docker run -d -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server", returnStdout: true).trim()
-                    def frontContainerId = sh(script: "docker run -d -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front", returnStdout: true).trim()
-
-                    sh 'sleep 15' // Give the containers some time to start up
-                }
-            }
-        }
+//        stage('Deploy Containers') {
+//            steps {
+//                script {
+//                  def serverContainerId = sh(script: "docker run -d -p 3001:3001 --name reactapp_server yehonatan111/reactapp_server", returnStdout: true).trim()
+//                    def frontContainerId = sh(script: "docker run -d -p 3000:3000 --name reactapp_front yehonatan111/reactapp_front", returnStdout: true).trim()
+//
+//                    sh 'sleep 15' // Give the containers some time to start up
+//                }
+//            }
+//        }
         stage('Run Tests') {
             steps {
                 script {
@@ -43,10 +43,10 @@ pipeline {
 		    }
 	    }
     }
-// post {
-// 	always {
-// 		sh 'docker logout'
-// 	}
+ post {
+ 	always {
+ 		sh 'docker logout'
+ 	}
 //         success {
 //             echo "Tests passed, pipeline succeeded!"
 //             cleanUpContainers()

@@ -12,9 +12,9 @@ pipeline {
 	}
         stage('Deploy Containers') {
             steps {
-		sh 'docker run -d -p 31:3001 yehonatan111/serverapp'
+		sh 'docker run -d -p 3101:3001 yehonatan111/serverapp'
                 sh 'sleep 5' // Give the container some time to start up
-		sh 'docker run -d -p 30:3000 yehonatan111/frontapp'
+		sh 'docker run -d -p 3100:3000 yehonatan111/frontapp'
                 sh 'sleep 5' // Give the container some time to start up
             }
         }

@@ -18,17 +18,11 @@ pipeline {
                 sh 'sleep 5' // Give the container some time to start up
             }
         }
-//        stage('Run Tests') {
-//            steps {
-//                script {
-//                    def pytestExitCode = sh(script: "docker run --rm yehonatan111/reactapp_pytest", returnStatus: true)
-//                
-//                    if (pytestExitCode != 0) {
-//                        error("Pytest failed with exit code: ${pytestExitCode}")
-//                    }
-//                }
-//            }
-//        }
+        stage('Run Tests') {
+            steps {
+                sh 'python3 -m pytest --junitxml==testresault.xml test/test.py'
+            }
+       }
 	    stage('Login') {
 	    	steps {
 		    	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'

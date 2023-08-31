@@ -30,17 +30,28 @@ pipeline {
 	    }
 	    stage('Push') {
 		    steps {
-			sh 'docker push yehonatan111/appserver'
+			    sh 'docker push yehonatan111/appserver'
 		    	sh 'docker push yehonatan111/appfront'
 		    }
 	    }
 	    stage('Remove images') {
-		steps {
-			sh 'docker kill $(docker ps -q)'
-			sh 'docker rmi -f yehonatan111/serverapp'
-			sh 'docker rmi -f yehonatan111/frontapp'
+		    steps {
+			    sh 'docker kill $(docker ps -q)'
+			    sh 'docker rmi -f yehonatan111/appserver'
+			    sh 'docker rmi -f yehonatan111/appfront'
+            }
 		}
+        stage('TF init&plan') {
+            steps {
+                sh 'terraform init'
+                sh 'terraform plan -var-file=linux.sh -out linux.sh'
+            }
 	    }
+        stage('TF Approval') {
+            steps {
+                sh 'terraform apply --auto-approve'
+            }
+        }
     }
  post {
  	always {

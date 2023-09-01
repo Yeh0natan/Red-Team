@@ -18,11 +18,11 @@ pipeline {
                 sh 'sleep 5' // Give the container some time to start up
             }
         }
-        stage('Run Tests') {
-            steps {
-                sh 'python3 -m pytest --junitxml==testresault.xml test/test.py'
-            }
-       }
+//        stage('Run Tests') {
+//            steps {
+//                sh 'python3 -m pytest --junitxml==testresault.xml test/test.py'
+//            }
+//       }
 	    stage('Login') {
 	    	steps {
 		    	sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'

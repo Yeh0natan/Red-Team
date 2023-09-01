@@ -1,6 +1,6 @@
     provider "aws" {
         access_key = "AKIAW74M42NJ6W6QXWQE"
-	secret_key = "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"
+	secret_key = ""
 	region     = "eu-central-1"
         }
     variable "awsprops" {

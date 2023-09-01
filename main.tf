@@ -13,18 +13,10 @@
             secgroupname = "Red-Team-SG"
         }
     }
-    resource "aws_security_group" "project-sg" {
-        name = lookup(var.awsprops, "secgroupname")
-        description = lookup(var.awsprops, "secgroupname")
+    resource "aws_security_group" "Red-Team-SG" {
+        name = "Red-Team-SG"
+        description = "Red-Team-SG"
         vpc_id = lookup(var.awsprops, "vpc")
-
-        // To Allow SSH Transport
-        ingress {
-            from_port = 22
-            protocol = "tcp"
-            to_port = 22
-            cidr_blocks = ["0.0.0.0/0"]
-        }
 
         // To Allow Port 80 Transport
         ingress {
@@ -37,21 +29,7 @@
         ingress {
             from_port = 443
             protocol = "tcp"
-            to_port = 80
-            cidr_blocks = ["0.0.0.0/0"]
-        }
-        // To Allow Port 3000 Transport
-        ingress {
-            from_port = 3000
-            protocol = ""
-            to_port = 3000
-            cidr_blocks = ["0.0.0.0/0"]
-        }
-        // To Allow Port 3001 Transport
-        ingress {
-            from_port = 3001
-            protocol = ""
-            to_port = 3001
+            to_port = 443
             cidr_blocks = ["0.0.0.0/0"]
         }
         egress {
@@ -72,7 +50,7 @@
         associate_public_ip_address = true
         key_name = "myseckey"
         vpc_security_group_ids = [
-            aws_security_group.project-sg.id
+            aws_security_group.Red-Team-SG.id
         ]
         root_block_device {
             delete_on_termination = true
@@ -87,7 +65,7 @@
             OS = "UBUNTU"
         }
 
-        depends_on = [ aws_security_group.project-sg ]
+        depends_on = [ aws_security_group.Red-Team-SG ]
     }
         resource "aws_instance" "appfront" {
         ami = lookup(var.awsprops, "ami")
@@ -96,7 +74,7 @@
         associate_public_ip_address = true
         key_name = "myseckey"
         vpc_security_group_ids = [
-            aws_security_group.project-sg.id
+            aws_security_group.Red-Team-SG.id
         ]
 	user_data = file("front.sh")
 
@@ -111,9 +89,8 @@
             OS = "UBUNTU"
         }
 
-        depends_on = [ aws_security_group.project-sg ]
+        depends_on = [ aws_security_group.Red-Team-SG ]
     }
 //    output "ec2instance" {
 //        value = aws_instance.*.public_ip
 //    }
-

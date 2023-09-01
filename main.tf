@@ -125,7 +125,7 @@ terraform {
 
         depends_on = [ aws_security_group.project-sg ]
     }
-    output "ec2instance" {
-        value = aws_instance.*.public_ip
-    }
+//    output "ec2instance" {
+//        value = aws_instance.*.public_ip
+//    }
 }

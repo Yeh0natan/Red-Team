@@ -53,10 +53,10 @@ pipeline {
             }
         }
     }
- post {
- 	always {
- 		sh 'docker logout'
- 	}
+// post {
+// 	always {
+// 		sh 'docker logout'
+// 	}
 //         success {
 //             echo "Tests passed, pipeline succeeded!"
 //             cleanUpContainers()

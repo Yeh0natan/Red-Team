@@ -1,6 +1,6 @@
     provider "aws" {
         access_key = "AKIAW74M42NJ6W6QXWQE"
-	secret_key = ""
+	secret_key = var.AWS_SECRET_KEY
 	region     = "eu-central-1"
         }
     variable "awsprops" {
@@ -63,16 +63,29 @@
         subnet_id = lookup(var.awsprops, "subnet")
         associate_public_ip_address = true
         key_name = "myseckey"
-        vpc_security_group_ids = [
-            aws_security_group.Red-Team-SG.id
-        ]
+        vpc_security_group_ids = [aws_security_group.Red-Team-SG.id]
+        user_data = <<-EOF
+            #!/bin/bash
+            sudo apt update
+            sudo apt-get install ca-certificates curl gnupg
+            sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+            sudo apt update
+            sudo apt-get install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl enable docker
+            sudo groupadd docker
+            sudo usermod -aG docker ubuntu
+            docker pull yehonatan111/appserver
+            docker run -d -p 3001:3001 yehonatan111/appserver
+        EOF
+
         root_block_device {
             delete_on_termination = true
             volume_size = 8
             volume_type = "gp2"
         }
-
-	user_data = file("server.sh")
         tags = {
             Name ="SERVER01"
             Environment = "DEV"
@@ -81,16 +94,29 @@
 
         depends_on = [ aws_security_group.Red-Team-SG ]
     }
-        resource "aws_instance" "appfront" {
+    resource "aws_instance" "appfront" {
         ami = lookup(var.awsprops, "ami")
         instance_type = lookup(var.awsprops, "itype")
         subnet_id = lookup(var.awsprops, "subnet")
         associate_public_ip_address = true
         key_name = "myseckey"
-        vpc_security_group_ids = [
-            aws_security_group.Red-Team-SG.id
-        ]
-	user_data = file("front.sh")
+        vpc_security_group_ids = [aws_security_group.Red-Team-SG.id]
+	user_data = <<-EOF
+            #! /bin/bash
+            sudo apt update
+            sudo apt-get install nano
+            sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+            sudo apt update
+            sudo apt-get install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl enable docker
+            sudo groupadd docker
+            sudo usermod -aG docker ubuntu
+            docker pull yehonatan111/appfront
+            docker run -d -p 3000:3000 yehonatan111/appfront
+        EOF
 
         root_block_device {
             delete_on_termination = true
@@ -98,7 +124,7 @@
             volume_type = "gp2"
         }
         tags = {
-            Name ="FRONTENT01"
+            Name ="FRONTEND01"
             Environment = "DEV"
             OS = "UBUNTU"
         }
